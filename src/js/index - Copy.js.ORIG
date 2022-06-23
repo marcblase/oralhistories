@@ -1,0 +1,2 @@
+// prevent context menu. For production site.
+// window.addEventListener('contextmenu', (e) => e.preventDefault());

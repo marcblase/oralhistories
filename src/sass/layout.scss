@@ -1,0 +1,172 @@
+// landing page
+
+.vid_wrapper {
+	margin: 0;
+	padding: 0;
+}
+
+video#video_splash { 
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	min-width: 100%;
+	min-height: 100vh;
+	width: auto;
+	height: auto;
+	z-index: -100; // all the way in the background
+	transform: translateX(-50%) translateY(-50%);
+	background: url('../img/video.webp ') no-repeat;
+	// background-size: cover;
+	// transition: 1s opacity;
+}
+
+// main content page
+
+.content_wrapper {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+	background-image: url(../img/background.webp);
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+$padding-right: 50px;
+
+.content_holder {
+	padding-right: $padding-right;
+	position: fixed;
+	top: 50px;
+	left: 370px;
+	width: calc(100vw - 370px - 173px - #{$padding-right});
+	height: calc(100vh - 100px); // 50px from top and bottom
+	// border-top: 3px solid $gray;
+	// border-bottom: 3px solid $gray;
+	// box-shadow: inset 0 0 3px green;
+  scrollbar-width: thin;
+  scrollbar-color: $scrollbar $scrollbar-track;
+  overflow-y: auto;
+
+	&::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $scrollbar-track;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar;
+    border-radius: 6px;
+    border: 3px solid $scrollbar-track;
+  }
+}
+
+.story-item {
+	display: flex;
+	flex-flow: row nowrap;
+	width: 100%;
+
+	section {
+		margin: 0;
+		padding: 0;
+	}
+
+  .story-photo {
+  	margin-right: 25px;
+  	width: 480px;
+
+  	img {
+  		width: 480px;
+  	}
+  }
+
+  .story-content {
+  	flex: 1 1 0;
+
+  	h2 {
+  		margin-bottom: 25px;
+  		font-size: 34px;
+  		font-family: $century;
+  		font-weight: 400;
+  		font-style: italic;
+  		color: $yellow;
+  	}
+
+  	p {
+  		margin-bottom: 25px;
+  		font-size: 18px;
+  		font-family: $century;
+  		color: $white;
+
+  		&.attribution {
+  			font-size: 14px;
+  			font-family: $tabletgothic;
+  			color: $gray;
+
+  			q {
+  				font-family: $serif;
+  				font-style: italic;
+  			}
+  		}
+  	}
+
+  	ul {
+  		list-style: none;
+  		margin: 0;
+  		padding: 0;
+  		display: flex;
+  		flex-flow: column nowrap;
+
+  		li.audio-item {
+  			margin: 0 0 3px;
+  			padding: 10px;
+  			height: 50px;
+  			display: flex;
+  			flex-flow: row nowrap;
+  			align-items: center;
+  			font-family: $tabletgothic;
+  			color: $gray;
+  			background-color: $dark-gray;
+
+  			&:hover {
+  				cursor: pointer;
+  			}
+
+  			&:last-of-type {
+  				margin-bottom: 0;
+  			}
+
+  			.audio-button {
+  				margin-right: 15px;
+  				width: 44px;
+  				height: 44px;
+  				transition: all 0.2s ease; 
+  				background-size: cover;
+  				background-position: 50% 50%;
+
+  			}
+
+  			&.play {
+	  			.audio-button {
+						background-image: url(../img/play.svg);
+					}
+				}
+
+				&.pause {
+	  			.audio-button {
+						background-image: url(../img/pause.svg);
+					}
+				}
+
+  			span.audio-time {
+  				font-family: $century;
+  				font-style: italic;
+  				color: $yellow;
+  			}
+  		}
+  	}
+  }
+}

@@ -1,0 +1,191 @@
+document.addEventListener('play', function(e){
+    var audios = document.getElementsByTagName('audio');
+    for(var i = 0, len = audios.length; i < len;i++){
+        if(audios[i] != e.target){
+            audios[i].pause();
+        }
+    }
+}, true);
+
+// remove right click // ADD back in for PROD
+// document.addEventListener("contextmenu", function (e){
+//     e.preventDefault();
+// }, false);
+
+// document.addEventListener('contextmenu', evt => evt.preventDefault());
+
+var $idleTime = 0;
+
+function timerIncrement() {
+    
+    $idleTime = $idleTime + 1; // increment idler
+    
+    var $thisUrl = window.location.href, // where are we
+    $urlFilename = $thisUrl.substring($thisUrl.lastIndexOf('/')+1); // just the last bit please
+    
+    if ($idleTime > 1 && $urlFilename !== 'index.html') { // 1 minutes and not index.html
+        window.location.href = "index.html"; // back to the beginning
+    }
+}
+
+$(document).on("play", function(){
+    
+    $("audio").each(function(index, audio) {
+        audio.pause();
+        console.log("audio paused");
+    });
+
+});
+
+$(document).ready(function() {
+
+    // set timeout timer
+    var $idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+
+    function resetTimer() {
+        $idleTime = 0;
+        console.log("timer reset");
+    }
+
+    // Add events to reset timer
+    $(this).onmousemove = resetTimer;
+    $(this).onmousedown = resetTimer;
+    $(this).onclick = resetTimer;
+    $(this).keypress = resetTimer;
+    $(this).ontouchstart = resetTimer;
+
+    // function isPlaying(audelem) { return !audelem.paused; } // is audio playing
+
+
+    // play audio
+    $(".play").on("click", function(){
+
+        // pause all other audios
+        var $audios = document.querySelectorAll('audio');
+        for (var i = 0; i < $audios.length; i++){
+            var $audio = $audios[i];
+            $audio.pause;
+            $audio.parentNode.removeChild($audio)
+        }
+
+        console.log("audio item clicked");
+
+        var $thisOne = $(this);
+        var $audioTime = $thisOne.children(".audio-time");
+
+        // change icon
+        $thisOne.removeClass('play').addClass('pause');
+
+        // setup audio
+        var $audioElement = document.createElement('audio'),
+            $audioDuration,
+            $mins,
+            $secs;
+
+        // add src
+        $audioElement.setAttribute('src', $(this).attr("data-audio"));
+        // add id
+        $audioElement.setAttribute('id', $(this).attr("data-id"));
+
+        // setup countdown vars
+        $audioDuration = parseInt($audioElement.duration);
+        $secs = $audioDuration % 60;
+        $mins = Math.floor( $audioDuration / 60 ) % 60;
+
+        $secs = $secs < 10 ? "0"+$secs : $secs; // pretty it up
+
+        // watch for the end
+        $audioElement.addEventListener("ended", function() {
+            $thisOne.removeClass('pause').addClass('play'); // reset button
+            // $audioTime.html($mins + ":" + $secs); // reset time display
+            console.log("audio ended");
+        }, false);
+        
+        // Countdown
+        $audioElement.addEventListener("timeupdate", function() {
+            // var $audioTime = $thisOne.children(".audio-time"), // document.getElementById('timeleft')
+            var duration = parseInt( $audioElement.duration ),
+                currentTime = parseInt( $audioElement.currentTime ),
+                timeLeft = duration - currentTime,
+                s, m;
+            
+            s = timeLeft % 60;
+            m = Math.floor( timeLeft / 60 ) % 60;
+            
+            s = s < 10 ? "0"+s : s;
+            // m = m < 10 ? "0"+m : m; // no need as layout doesn't have preceeding zeds
+            
+            $audioTime.empty().html(m + ":" + s); // update markup with countdown
+
+            resetTimer(); // reset timer while playing
+
+        }, false);
+
+        // play audio
+        $audioElement.play();
+        console.log("audio playing");
+
+        // pause if pressed again
+        $(this).on("click", function(){
+            $audioElement.pause();
+        });
+
+        /*
+        // Countup
+        $audioElement.addEventListener("timeupdate", function() {
+            var timeline = document.getElementById('duration');
+            var s = parseInt($audioElement.currentTime % 60);
+            var m = parseInt(($audioElement.currentTime / 60) % 60);
+            if (s < 10) {
+                timeline.innerHTML = m + ':0' + s;
+            }
+            else {
+                timeline.innerHTML = m + ':' + s;
+            }
+        }, false);
+        */
+
+        /*
+        $audioElement.addEventListener("canplay",function(){
+            $("#length").text("Duration:" + $audioElement.duration + " seconds");
+            $("#source").text("Source:" + $audioElement.src);
+            $("#status").text("Status: Ready to play").css("color","green");
+
+            console.log("Duration:" + $audioElement.duration + " seconds");
+            console.log("Source:" + $audioElement.src);
+            console.log("Status: Ready to play").css("color","green"));
+        });
+        
+        $audioElement.addEventListener("timeupdate",function(){
+            $("#currentTime").text("Current second:" + $audioElement.currentTime);
+            console.log("Current second:" + Math.round($audioElement.currentTime));
+        });
+        
+        $('#play').click(function() {
+            $audioElement.play();
+            $("#status").text("Status: Playing");
+        });
+        
+        $('#pause').click(function() {
+            $audioElement.pause();
+            $("#status").text("Status: Paused");
+        });
+        
+        $('#restart').click(function() {
+            $audioElement.currentTime = 0;
+        });
+        */
+
+    });
+    
+    $(".pause").on("click", function(){
+
+        $("audio").each(function(index, audio) {
+            audio.pause();
+        }); 
+        // pauseAudio();
+        console.log("audio paused");
+
+    });
+
+});
