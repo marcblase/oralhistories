@@ -1,54 +1,80 @@
 var AUD = new Audio,
-      BTNS = document.querySelectorAll("[data-audio]");
-
-var timeLeftID;
+    BTNS = document.querySelectorAll("[data-audio]"),
+    TIMERS = document.querySelectorAll(".audio-time"),
+    timeLeftID, // ID of time container 
+    timeLeft; // the container to be updated
 
 function playPause() {
     
-    var src = this.dataset.audio;
+    // this is the curent file being played
+    if (this.classList.contains("current")){ 
+         
+        if (AUD.paused){
+            AUD.play();
+            this.classList.toggle("pause"); // toggle            
+        } else {
+            AUD.pause();
+            this.classList.toggle("pause"); // toggle
+        }
 
-    timeLeftID = this.dataset.id;
-    
-    if (AUD.src != src){
-        AUD.src = src;
+    // not the curent file, reset and start over
+    } else { 
+        
+        var src = this.dataset.audio;
+
+        timeLeftID = this.dataset.id;
+        console.log(timeLeftID);
+        
+        if (AUD.src !== src){
+            AUD.src = src;
+        }
+
+        AUD[AUD.paused ? "play" : "pause"]();
+        
+        // reset classes
+        BTNS.forEach(el => el.classList.remove("pause"));
+        BTNS.forEach(el => el.classList.remove("current"));
+
+        // reset audio timer markup
+        TIMERS.forEach(function(el){
+            var dataTime = el.dataset.time;
+            el.innerHTML = dataTime;
+        });
+        
+        this.classList.toggle("pause"); // toggle
+        this.classList.toggle("current"); // toggle
     }
-    
-    AUD[AUD.paused ? "play" : "pause"]();
-    
-    BTNS.forEach(el => el.classList.remove("pause"));
-    
-    this.classList.toggle("pause", !AUD.paused);
-    
-    console.log(timeLeftID);
-    return timeLeftID;
-
 }
 
-AUD.addEventListener("timeupdate", resetTimer); // no countdown
+//  AUD.addEventListener("timeupdate", resetTimer); // no countdown
 
 // Countdown
-/*AUD.addEventListener("timeupdate", function() {
+AUD.addEventListener("timeupdate", (event) => {
     
     resetTimer(); // reset timer while playing
     
-    // let timeLeft = document.getElementById('timeLeft'),
-    // var timeLeft = this.querySelectorAll(':scope > .audio-time'),
-    var timeLeft = document.getElementById(timeLeftID),
-        duration = parseInt( AUD.duration ),
+    // update timeLeft
+    timeLeft = document.getElementById(timeLeftID);
+    
+    var duration = parseInt( AUD.duration ),
         currentTime = parseInt( AUD.currentTime ),
-        timeLeft = duration - currentTime,
+        timeMath = duration - currentTime,
         s, 
         m;
+    
             
-    s = timeLeft % 60;
-    m = Math.floor( timeLeft / 60 ) % 60;
+    s = timeMath % 60;
+    m = Math.floor( timeMath / 60 ) % 60;
     
     s = s < 10 ? "0"+s : s;
-    m = m < 10 ? "0"+m : m;
+    // m = m < 10 ? "0"+m : m; // no need as layout doesn't have preceeding zeds
     
-    timeLeft.innerHTML = m+":"+s;
+    // fixes the NaN flash on content change
+    if (timeMath < duration){
+        timeLeft.innerHTML = m+":"+s;
+    }
 
-});*/
+}, false);
 
 AUD.addEventListener("ended", playPause);
 
