@@ -3,3 +3,4 @@ package-lock.json
 MuseWork-OralHistories
 _MISC
 .vscode
+*.ORIG
