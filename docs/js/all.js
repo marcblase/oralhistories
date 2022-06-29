@@ -1,3 +1,12 @@
+// global functions
+// remove right click // ADD back in for PROD
+// document.addEventListener("contextmenu", function (e){
+//     e.preventDefault();
+// }, false);
+
+document.addEventListener('contextmenu', evt => evt.preventDefault());
+
+// main page scripts
 var AUD = new Audio,
     BTNS = document.querySelectorAll("[data-audio]"),
     TIMERS = document.querySelectorAll(".audio-time"),
